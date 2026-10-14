@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,6 +18,7 @@ const Navbar = () => {
   const [providers, setProviders] = useState(null);
 
   const pathname = usePathname();
+  const profileMenuRef = useRef(null);
 
   useEffect(() => {
     const setAuthProviders = async () => {
@@ -26,6 +27,26 @@ const Navbar = () => {
     };
 
     setAuthProviders();
+  }, []);
+
+  // close menus when the route changes
+  useEffect(() => {
+    setIsProfileMenuOpen(false);
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // close the profile dropdown when clicking outside it
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(e.target)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -150,7 +171,7 @@ const Navbar = () => {
                 <UnreadMessageCount />
               </Link>
               {/* <!-- Profile dropdown button --> */}
-              <div className="relative ml-3">
+              <div className="relative ml-3" ref={profileMenuRef}>
                 <div>
                   <button
                     type="button"
