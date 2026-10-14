@@ -8,7 +8,7 @@ import {
   FaMapMarker,
 } from "react-icons/fa";
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, eager = false }) => {
   const getRateDisplay = () => {
     const { rates } = property;
     if (rates.monthly) {
@@ -25,11 +25,12 @@ const PropertyCard = ({ property }) => {
       <Link href={`/properties/${property._id}`}>
         <Image
           src={property.images[0]}
-          alt=""
-          width="0"
-          height="0"
-          sizes="100vw"
+          alt={property.name}
+          width={1200}
+          height={800}
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="w-full h-auto rounded-t-xl"
+          loading={eager ? "eager" : "lazy"}
         />
       </Link>
       <div className="p-4">

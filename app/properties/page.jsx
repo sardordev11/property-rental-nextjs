@@ -3,7 +3,9 @@ import Pagination from "@/components/Pagination";
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
 
-const PropertiesPage = async ({ searchParams: { page = 1, pageSize = 9 } }) => {
+const PropertiesPage = async ({ searchParams }) => {
+  const { page = 1, pageSize = 9 } = await searchParams;
+
   await connectDB();
   const skip = (page - 1) * pageSize;
 
@@ -19,8 +21,12 @@ const PropertiesPage = async ({ searchParams: { page = 1, pageSize = 9 } }) => {
           <p>No Properties Found</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {properties.map((property) => (
-              <PropertyCard key={property._id} property={property} />
+            {properties.map((property, index) => (
+              <PropertyCard
+                key={property._id}
+                property={property}
+                eager={index < 3}
+              />
             ))}
           </div>
         )}
