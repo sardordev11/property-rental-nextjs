@@ -26,7 +26,7 @@ const HomeProperties = async () => {
                 <PropertyCard
                   key={property._id}
                   property={property}
-                  eager={index < 3}
+                  eager={index === 0}
                 />
               ))}
             </div>
